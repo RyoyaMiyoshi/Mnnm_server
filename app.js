@@ -53,9 +53,10 @@ pg.connect(connect_db,function(err, client){
  console.log("connect db");
 var imax = "select max(id) from notes;"
 client.query(imax,function(err, max){
-console.log(max);
+console.log(max.rows[0]);
 var i;
 var w = 0;
+var q=max.rows[0];
 for(i=max;i>max-8;i=i-1){
 var array = new Array();
 array[w] = new Object();  
