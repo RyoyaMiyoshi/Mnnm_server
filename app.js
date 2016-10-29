@@ -29,7 +29,7 @@ var connect_db = "postgres://ayeypgykvzakah:_17U8W-o_m4Q2fXT-XxulAbxIN@ec2-54-23
 
 io.sockets.on('connection',function(socket){
  console.log("connect server");
-  pg.connect('connect_db',function(err, client){
+  pg.connect(connect_db,function(err, client){
    console.log("connect db");
 
 socket.on('encode',function( data ) {
