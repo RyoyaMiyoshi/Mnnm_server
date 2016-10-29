@@ -63,7 +63,9 @@ array[w] = new Object();
 var getdata = "select * from notes where id = i;"  
 client.query(getdata,function(err, note){
 array[w].code = note.rows[0].pdf;
-w = w + 1;
+array[w].id = note.rows[0].id;
+console.log(array[w].id);
+w = w+1;
 });
 }
 io.sockets.emit('list_back',array);
