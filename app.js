@@ -51,16 +51,16 @@ client.query(pcid, function(err, max)
 socket.on('list',function(){
 pg.connect(connect_db,function(err, client){
  console.log("connect db");
-var max = "select max(id) from tablename;"
+var max = "select max(id) from notes;"
 client.query(max,function(err, max){
-var i = 0;
+var i;
 var w = 0;
 for(i=max;i>max-8;i=i-1){
 var array = new Array();
-array[i] = new Object();  
+array[w] = new Object();  
 var getdata = "select * from notes where id = i;"  
 client.query(getdata,function(err, note){
-array[w].code = note.rows[i].pdf;
+array[w].code = note.rows[0].pdf;
 w = w + 1;
 });
 }
