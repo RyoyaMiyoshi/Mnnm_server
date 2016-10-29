@@ -69,7 +69,7 @@ w = w+1;
 });
 }
 io.sockets.emit('list_back',array);
-console.log("success");
+console.log(array.length);
 });
 });
 });
