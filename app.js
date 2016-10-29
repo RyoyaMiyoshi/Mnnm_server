@@ -54,14 +54,14 @@ pg.connect(connect_db,function(err, client){
 var max = "select max(id) from tablename;"
 client.query(max,function(err, max){
 var i = 0;
-
+var w = 0;
 for(i=max;i>max-8;i=i-1){
 var array = new Array();
 array[i] = new Object();  
-
 var getdata = "select * from notes where id = i;"  
 client.query(getdata,function(err, note){
-array[i].code = note.rows[i].pdf;
+array[w].code = note.rows[i].pdf;
+w = w + 1;
 });
 }
 io.sockets.emit('list_back',array);
