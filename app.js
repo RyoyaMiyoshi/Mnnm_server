@@ -51,8 +51,9 @@ client.query(pcid, function(err, max)
 socket.on('list',function(){
 pg.connect(connect_db,function(err, client){
  console.log("connect db");
-var max = "select max(id) from notes;"
-client.query(max,function(err, max){
+var imax = "select max(id) from notes;"
+client.query(imax,function(err, max){
+console.log(max);
 var i;
 var w = 0;
 for(i=max;i>max-8;i=i-1){
@@ -65,6 +66,7 @@ w = w + 1;
 });
 }
 io.sockets.emit('list_back',array);
+console.log("success");
 });
 });
 });
