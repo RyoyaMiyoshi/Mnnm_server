@@ -62,8 +62,8 @@ for(i=q;i>q-8;i=i-1){
 array[w] = new Object();  
 var getdata = "select * from notes where id = i;"  
 client.query(getdata,function(err, note){
-array[w].code = note.rows[0].pdf;
-array[w].id = note.rows[0].id;
+array[w].code = note.pdf;
+array[w].id = note.id;
 console.log(array[w].id);
 w = w+1;
 });
