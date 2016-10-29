@@ -65,8 +65,8 @@ array[w] = new Object();
 array[w].code = note.rows[0].pdf;
 array[w].id = note.rows[0].id;
 console.log(array[w].id);
-w = w+1;
 });
+w = w+1;
 }
 io.sockets.emit('list_back',array);
 console.log(array.length);
