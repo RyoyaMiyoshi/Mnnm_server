@@ -57,24 +57,24 @@ console.log(max.rows.length);
 var i;
 var w = 0;
 var q=max.rows.length;
-var array = new Array();
-for(i=q;i>q-8;i=i-1){  
-var getdata = "select id, pdf from notes where id = "+i+";"  
+var arraylist= new Array();
+var getdata = "select id, pdf from notes;"
 client.query(getdata,function(err, note){
-array[w] = new Object();
-array[w].code = note.rows[0].pdf;
-array[w].id = note.rows[0].id;
-console.log(array[w].id);
-});
+
+for(i=q;i>q-8;i=i-1){  
+arraylist[w] = new Object();
+arraylist[w].code = note.rows[0].pdf;
+arraylist[w].id = note.rows[0].id;
+console.log(arraylist[w].id);
 w = w+1;
 }
 io.sockets.emit('list_back',array);
-console.log(array.length);
-console.log(array[1].id);
+console.log(arraylist.length);
+console.log(arraylist[1].id);
 });
 });
 });
-
+});
 
 
 
