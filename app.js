@@ -70,6 +70,7 @@ w = w+1;
 }
 io.sockets.emit('list_back',array);
 console.log(array.length);
+console.log(array[1].id);
 });
 });
 });
