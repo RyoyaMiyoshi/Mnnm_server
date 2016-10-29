@@ -58,7 +58,7 @@ var getdata = "select id, pdf from notes;"
 client.query(getdata,function(err, note){
 var i;
 var w = 0;
-var q=max.rows.length;
+var q=max.rows.length-1;
 var arraylist= new Array();
 for(i=q;i>q-8;i=i-1){  
 arraylist[w] = new Object();
