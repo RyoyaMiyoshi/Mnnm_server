@@ -51,13 +51,13 @@ client.query(pcid, function(err, max)
 socket.on('list',function(){
 pg.connect(connect_db,function(err, client){
  console.log("connect db");
-var imax = "select max(id) from notes;"
+var imax = "select id from notes;"
 client.query(imax,function(err, max){
-console.log(max.rows[0]);
+console.log(max.rows.length);
 var i;
 var w = 0;
-var q=max.rows[0];
-for(i=max;i>max-8;i=i-1){
+var q=max.rows.length;
+for(i=q;i>max-8;i=i-1){
 var array = new Array();
 array[w] = new Object();  
 var getdata = "select * from notes where id = i;"  
