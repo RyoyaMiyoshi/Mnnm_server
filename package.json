@@ -8,8 +8,13 @@
     "pg": "latest",
     "socket.io": "*",
     "tesseract.js": "^1.0.10",
-    "kuromoji": "*"
+    "kuromoji": "*" 
   },
+
+  "engines": {
+    "node": "6.9.0"
+  },
+
   "devDependencies": {
     "babel-preset-es2015": "^6.18.0"
   },
