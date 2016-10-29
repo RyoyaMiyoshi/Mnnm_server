@@ -62,8 +62,8 @@ var q=max.rows.length;
 var arraylist= new Array();
 for(i=q;i>q-8;i=i-1){  
 arraylist[w] = new Object();
-arraylist[w].code = note.rows[0].pdf;
-arraylist[w].id = note.rows[0].id;
+arraylist[w].code = note.rows[i].pdf;
+arraylist[w].id = note.rows[i].id;
 console.log(arraylist[w].id);
 w = w+1;
 }
