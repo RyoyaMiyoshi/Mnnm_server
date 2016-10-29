@@ -54,13 +54,12 @@ pg.connect(connect_db,function(err, client){
 var imax = "select id from notes;"
 client.query(imax,function(err, max){
 console.log(max.rows.length);
+var getdata = "select id, pdf from notes;"
+client.query(getdata,function(err, note){
 var i;
 var w = 0;
 var q=max.rows.length;
 var arraylist= new Array();
-var getdata = "select id, pdf from notes;"
-client.query(getdata,function(err, note){
-
 for(i=q;i>q-8;i=i-1){  
 arraylist[w] = new Object();
 arraylist[w].code = note.rows[0].pdf;
@@ -68,7 +67,7 @@ arraylist[w].id = note.rows[0].id;
 console.log(arraylist[w].id);
 w = w+1;
 }
-io.sockets.emit('list_back',array);
+io.sockets.emit('list_back',arraylist);
 console.log(arraylist.length);
 console.log(arraylist[1].id);
 });
