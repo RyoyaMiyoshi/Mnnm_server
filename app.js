@@ -58,7 +58,7 @@ var i;
 var w = 0;
 var q=max.rows.length;
 var array = new Array();
-for(i=q;i>max-8;i=i-1){
+for(i=q;i>q-8;i=i-1){
 array[w] = new Object();  
 var getdata = "select * from notes where id = i;"  
 client.query(getdata,function(err, note){
