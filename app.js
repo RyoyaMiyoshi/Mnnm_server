@@ -3,8 +3,8 @@ var socketio = require( 'socket.io' ); // Socket.IOモジュール読み込み
 var fs = require( 'fs' ); // ファイル入出力モジュール読み込み
 var pg = require( 'pg' );
 
- //ポート固定でHTTPサーバーを立てる
- var server = http.createServer( function( req, res ) {
+   //ポート固定でHTTPサーバーを立てる
+     var server = http.createServer( function( req, res ) {
    //もしURLにファイル名がないならばindex.htmlに飛ばすように
      if(req.url == "/")
          req.url = "/index.html";
@@ -23,6 +23,32 @@ var pg = require( 'pg' );
      });
    });
    server.listen(process.env.PORT)
+
+var io = socketio.listen(server);
+var connect_db = "postgres://ayeypgykvzakah:_17U8W-o_m4Q2fXT-XxulAbxIN@ec2-54-235-254-199.compute-1.amazonaws.com:5432/d5g401imvq4lac";
+
+io.sockets.on('connection',function(socket){
+ console.log("connect server");
+  pg.connect('connect_db',function(err, client){
+   console.log("connect db");
+
+socket.on('encode',function( data ) {
+  var pcid = "select id from notes"; 
+
+client.query(pcid, function(err, max)
+ {
+  var id_max = max.rows.length + 1;
+
+  var pcin = "insert into notes(id,pdf) values ("+id_max+",'"+data+"')";
+  client.query(pcin);
+
+  io.sockets.emit('encode_back', 1);
+ console.log(data);
+    
+    });
+   });
+  });
+ });
 
 
 
