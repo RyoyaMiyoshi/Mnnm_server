@@ -29,26 +29,51 @@ var connect_db = "postgres://ayeypgykvzakah:_17U8W-o_m4Q2fXT-XxulAbxIN@ec2-54-23
 
 io.sockets.on('connection',function(socket){
  console.log("connect server");
-  pg.connect(connect_db,function(err, client){
-   console.log("connect db");
+
 
 socket.on('encode',function( data ) {
-  var pcid = "select id from notes"; 
+pg.connect(connect_db,function(err, client){
+ console.log("connect db");  
+var pcid = "select id from notes"; 
 
 client.query(pcid, function(err, max)
  {
   var id_max = max.rows.length + 1;
-
   var pcin = "insert into notes(id,pdf) values ("+id_max+",'"+data+"')";
   client.query(pcin);
-
   io.sockets.emit('encode_back', 1);
  console.log(data);
-    
     });
    });
-  });
  });
+
+
+socket.on('list',function(){
+pg.connect(connect_db,function(err, client){
+ console.log("connect db");
+var max = "select max(id) from tablename;"
+client.query(max,function(err, max){
+var i = 0;
+
+for(i=max;i>max-8;i=i-1){
+var array = new Array();
+array[i] = new Object();  
+
+var getdata = "select * from notes where id = i;"  
+client.query(getdata,function(err, note){
+array[i].code = note.rows[i].pdf;
+});
+}
+io.sockets.emit('list_back',array);
+});
+});
+});
+
+
+
+
+  
+});
 
 
 
