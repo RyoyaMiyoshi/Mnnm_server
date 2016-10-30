@@ -67,12 +67,12 @@ io.sockets.on('connection',function(socket){
             array[w].id = note.rows[0].id;
             array[w].cource = note.rows[0].cource;
             console.log(array[w].id);
+            console.log(array[w].cource);
             w = w + 1;
           });
         };
         io.sockets.emit('list_back',array);
         console.log("success");
-        console.log(array[1].cource);
       });
     });
   });
