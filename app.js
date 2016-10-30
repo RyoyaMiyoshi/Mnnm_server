@@ -60,7 +60,7 @@ io.sockets.on('connection',function(socket){
         var q = max.rows.length;
         var array = new Array();
         for(i = q; i > q - 8; i = i - 1){
-          var getdata = "select id, pdf from notes where id = "+i+";"
+          var getdata = "select id, pdf,cource from notes where id = "+i+";"
           client.query(getdata,function(err, note){
             array[w] = new Object();
             array[w].code = note.rows[0].pdf;
