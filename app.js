@@ -72,6 +72,7 @@ io.sockets.on('connection',function(socket){
         };
         io.sockets.emit('list_back',array);
         console.log("success");
+        console.log(array[1].cource);
       });
     });
   });
