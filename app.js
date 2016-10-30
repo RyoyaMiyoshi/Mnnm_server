@@ -55,19 +55,19 @@ io.sockets.on('connection',function(socket){
       var imax = "select id from notes;"
       client.query(imax,function(err, max){
         console.log(max.rows.length);
-      var getdata = "select id, pdf,cource from notes where id = "+i+";"
+      var getdata = "select id, pdf,cource from notes;"
       client.query(getdata,function(err, note){
-        var i;
         var w = 0;
-        var q = max.rows.length;
+        var i;
+        var q = max.rows.length-1;
         var array = new Array();
         for(i = q; i > q - 8; i = i - 1){
             array[w] = new Object();
             array[w].code = note.rows[0].pdf;
             array[w].id = note.rows[0].id;
-           // array[w].cource = note.rows[0].cource;
+            array[w].cource = note.rows[0].cource;
             console.log(array[w].id);
-           // console.log(array[w].cource);
+            console.log(array[w].cource);
             w = w + 1;
           };
    io.sockets.emit('list_back',array);
