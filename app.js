@@ -49,7 +49,7 @@ io.sockets.on('connection',function(socket){
     });
   });
 
-ocket.on('list',function(){
+socket.on('list',function(){
 pg.connect(connect_db,function(err, client){
  console.log("connect db");
 var imax = "select id from notes;"
