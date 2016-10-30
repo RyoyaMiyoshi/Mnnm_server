@@ -49,33 +49,33 @@ io.sockets.on('connection',function(socket){
     });
   });
 
-  socket.on('list',function(){
-    pg.connect(connect_db,function(err, client){
-      console.log("connect db");
-      var imax = "select id from notes;"
-      client.query(imax,function(err, max){
-        console.log(max.rows.length);
-      var getdata = "select id, pdf,cource from notes;"
-      client.query(getdata,function(err, note){
-        var w = 0;
-        var i;
-        var q = max.rows.length-1;
-        var array = new Array();
-        for(i = q; i > q - 8; i = i - 1){
-            array[w] = new Object();
-            array[w].code = note.rows[0].pdf;
-            array[w].id = note.rows[0].id;
-            array[w].cource = note.rows[0].cource;
-            console.log(array[w].id);
-            console.log(array[w].cource);
-            w = w + 1;
-          };
-   io.sockets.emit('list_back',array);
-       console.log(array.length);        
-         });
-      });
-    });
-  });
+ocket.on('list',function(){
+pg.connect(connect_db,function(err, client){
+ console.log("connect db");
+var imax = "select id from notes;"
+client.query(imax,function(err, max){
+console.log(max.rows.length);
+var getdata = "select id, pdf,cource from notes;"
+client.query(getdata,function(err, note){
+var i;
+var w = 0;
+var q=max.rows.length-1;
+var arraylist= new Array();
+for(i=q;i>q-8;i=i-1){  
+arraylist[w] = new Object();
+arraylist[w].code = note.rows[i].pdf;
+arraylist[w].id = note.rows[i].id;
+arraylist[w].cource = note.rows[i].cource;
+console.log(arraylist[w].id);
+w = w+1;
+}
+io.sockets.emit('list_back',arraylist);
+console.log(arraylist.length);
+console.log(arraylist[1].id);
+});
+});
+});
+});
 
   socket.on("convert_img", function(note_img){
     //画像の文字化
