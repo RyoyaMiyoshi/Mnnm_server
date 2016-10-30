@@ -41,7 +41,7 @@ io.sockets.on('connection',function(socket){
       client.query(pcid, function(err, max)
       {
         var id_max = max.rows.length + 1;
-        var pcin = "insert into notes(id,pdf) values ("+id_max+",'"+data+"')";
+        var pcin = "insert into notes(id,pdf,cource) values ("+id_max+",'"+data.code+"',"+data.cource+")";
         client.query(pcin);
         io.sockets.emit('encode_back', 1);
         console.log(data);
@@ -65,6 +65,7 @@ io.sockets.on('connection',function(socket){
             array[w] = new Object();
             array[w].code = note.rows[0].pdf;
             array[w].id = note.rows[0].id;
+            array[w].cource = note.rows[0].cource;
             console.log(array[w].id);
             w = w + 1;
           });
