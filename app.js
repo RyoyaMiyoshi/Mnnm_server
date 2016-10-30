@@ -65,9 +65,9 @@ io.sockets.on('connection',function(socket){
             array[w] = new Object();
             array[w].code = note.rows[0].pdf;
             array[w].id = note.rows[0].id;
-            array[w].cource = note.rows[0].cource;
+           // array[w].cource = note.rows[0].cource;
             console.log(array[w].id);
-            console.log(array[w].cource);
+           // console.log(array[w].cource);
             w = w + 1;
           });
         };
