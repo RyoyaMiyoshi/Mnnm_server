@@ -81,7 +81,7 @@ io.sockets.on('connection',function(socket){
     //画像の文字化
     Tesseract.recognize(note_img, {lang:"jpn"}).then(function(result){
       console.log("finish ocr");
-      socket.emit("convert_text", result.html);
+      io.sockets.emit("convert_text", result.html);
     });
   });
 
@@ -103,7 +103,7 @@ io.sockets.on('connection',function(socket){
           list.push(tokens[i]['surface_form']);
       }
       console.log(list);
-      socket.emit("con_keitaiso", list);
+      io.sockets.emit("con_keitaiso", list);
     });
   });
 

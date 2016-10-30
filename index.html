@@ -27,16 +27,9 @@
 
         </div><br>
         <button type="button" class="btn btn-primary" id="title">送信</button>
+
       </form>
 
-      <form class="form-inline">
-        OCR化テスト
-        <input type="file" class="form-control" id="note" onchange="handleFiles(this.files)">
-        <button type="button" class="btn btn-primary" id="convert_img">変換</button>
-        <br>
-        <div id="con_text"></div>
-        <div id="con_keitaiso"></div>
-      </form>
     <script type="text/javascript">
       //ソケット通信の準備
       var socket = io.connect();
