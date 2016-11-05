@@ -7,6 +7,14 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+    <script type="text/javascript">
+      //選択したデータの保存
+      var data="";
+      function handleFiles(files){
+        data=files[0];
+      };
+    </script>
   </head>
   <body>
     <div class="container">
@@ -16,25 +24,51 @@
           <label for="">test</label>
           <input type="text" class="form-control" id="title">
           <br>
-          
+
         </div><br>
-        <button type="submit" class="btn btn-primary">送信</button>
+        <button type="button" class="btn btn-primary" id="title">送信</button>
       </form>
-      <br>
-      <div id="res"></div>
-    </div>
+
+      <form class="form-inline">
+        OCR化テスト
+        <input type="file" class="form-control" id="note" onchange="handleFiles(this.files)">
+        <button type="button" class="btn btn-primary" id="convert_img">変換</button>
+        <br>
+        <div id="con_text"></div>
+        <div id="con_keitaiso"></div>
+      </form>
     <script type="text/javascript">
-//ソケット通信の準備
-var socket = io.connect();
-socket.on("list_back", function(data){
-  $("#res").html(data[1].id);
-});
-//サーバにデータを送る関数
-$("form").submit(function(e){
-var message = $("#title").val();    
- socket.emit("list");
-  e.preventDefault();
-});
+      //ソケット通信の準備
+      var socket = io.connect();
+      socket.on("list_back", function(data){
+        $("#res").html(data[1].code);
+      });
+      //サーバにデータを送る関数
+      $("#title").click(function(e){
+        var message = $("#title").val();
+        socket.emit("list");
+        e.preventDefault();
+      });
+
+      //画像から文章の書き出し
+      $("#convert_img").click(function(e){
+        socket.emit('convert_img', data);
+      });
+
+      //OCR化した文字列の表示→形態素解析
+      socket.on("convert_text", function(data){
+        $("#con_text").html(data);
+        data = $("#con_text").text();
+        socket.emit("keitaiso", data);
+      });
+
+      //形態素解析結果
+      socket.on("con_keitaiso", function(data){
+        for(var i = 0; i < data.length; i++){
+          $("#con_keitaiso").append(data[i]).append("/");
+        }
+      });
+
     </script>
   </body>
 </html>
