@@ -35,6 +35,7 @@
         <button type="button" class="btn btn-primary" id="convert_img">変換</button>
         <br>
         <div id="con_text"></div>
+        <div id="con_keitaiso"></div>
       </form>
     <script type="text/javascript">
       //ソケット通信の準備
@@ -54,10 +55,20 @@
         socket.emit('convert_img', data);
       });
 
-      //OCR化した文字列の表示
+      //OCR化した文字列の表示→形態素解析
       socket.on("convert_text", function(data){
         $("#con_text").html(data);
+        data = $("#con_text").text();
+        socket.emit("keitaiso", data);
       });
+
+      //形態素解析結果
+      socket.on("con_keitaiso", function(data){
+        for(var i = 0; i < data.length; i++){
+          $("#con_keitaiso").append(data[i]).append("/");
+        }
+      });
+
     </script>
   </body>
 </html>

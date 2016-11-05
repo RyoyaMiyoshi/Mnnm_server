@@ -2,7 +2,8 @@ var http = require( 'http' ); // HTTPモジュール読み込み
 var socketio = require( 'socket.io' ); // Socket.IOモジュール読み込み
 var fs = require( 'fs' ); // ファイル入出力モジュール読み込み
 var pg = require( 'pg' );
-var Tesseract = require('tesseract.js')
+var Tesseract = require('tesseract.js');
+var kuromoji = require('kuromoji');
 
 //ポート固定でHTTPサーバーを立てる
 var server = http.createServer( function( req, res ) {
@@ -79,6 +80,28 @@ io.sockets.on('connection',function(socket){
     Tesseract.recognize(note_img, {lang:"jpn"}).then(function(result){
       console.log("finish ocr");
       socket.emit("convert_text", result.html);
+    });
+  });
+
+  socket.on("keitaiso", function(text){
+    // この builder が辞書やら何やらをみて、形態素解析機を造ってくれるオブジェクトです。
+    var builder = kuromoji.builder({
+      // ここで辞書があるパスを指定します。今回は kuromoji.js 標準の辞書があるディレクトリを指定
+      dicPath: 'node_modules/kuromoji/dict/'
+    });
+    // 形態素解析機を作るメソッド
+    builder.build(function(err, tokenizer) {
+      // 辞書がなかったりするとここでエラーになります
+      if(err) { throw err; }
+      // tokenizer.tokenize に文字列を渡すと、その文を形態素解析してくれます。
+      var tokens = tokenizer.tokenize(text);
+      var list = [];
+      for(var i=0; i<tokens.length; i++){
+        if(tokens[i]['pos'] == "名詞")
+          list.push(tokens[i]['surface_form']);
+      }
+      console.log(list);
+      socket.emit("con_keitaiso", list);
     });
   });
 
