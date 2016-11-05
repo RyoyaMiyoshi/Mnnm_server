@@ -33,32 +33,32 @@
         OCR化テスト
         <input type="file" class="form-control" id="note" onchange="handleFiles(this.files)">
         <button type="default" class="btn btn-primary" id="convert_img">変換</button>
-        <div id="res"></div>
-      <br>
-      <div id="con_text"></div>
-    </div>
+        <br>
+        <div id="con_text"></div>
+      </form>
     <script type="text/javascript">
-//ソケット通信の準備
-var socket = io.connect();
-socket.on("list_back", function(data){
-  $("#res").html(data[1].code);
-});
-//サーバにデータを送る関数
-$("form").submit(function(e){
-var message = $("#title").val();
- socket.emit("list");
-  e.preventDefault();
-});
 
-//画像から文章の書き出し
-$("#convert_img").click(function(e){
-      socket.emit('convert_img', data);
-});
+      //ソケット通信の準備
+      var socket = io.connect();
+      socket.on("list_back", function(data){
+        $("#res").html(data[1].code);
+      });
+      //サーバにデータを送る関数
+      $("form").submit(function(e){
+      var message = $("#title").val();
+       socket.emit("list");
+        e.preventDefault();
+      });
 
-//OCR化した文字列の表示
-socket.on("convert_text", function(data){
-  $("#con_text").html(data);
-});
+      //画像から文章の書き出し
+      $("#convert_img").click(function(e){
+        socket.emit('convert_img', data);
+      });
+
+      //OCR化した文字列の表示
+      socket.on("convert_text", function(data){
+        $("#con_text").html(data);
+      });
     </script>
   </body>
 </html>
