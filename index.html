@@ -26,13 +26,13 @@
           <br>
 
         </div><br>
-        <button type="submit" class="btn btn-primary">送信</button>
+        <button type="button" class="btn btn-primary" id="title">送信</button>
       </form>
 
       <form class="form-inline">
         OCR化テスト
         <input type="file" class="form-control" id="note" onchange="handleFiles(this.files)">
-        <button type="default" class="btn btn-primary" id="convert_img">変換</button>
+        <button type="button" class="btn btn-primary" id="convert_img">変換</button>
         <br>
         <div id="con_text"></div>
       </form>
@@ -43,9 +43,9 @@
         $("#res").html(data[1].code);
       });
       //サーバにデータを送る関数
-      $("form").submit(function(e){
-      var message = $("#title").val();
-       socket.emit("list");
+      $("#title").click(function(e){
+        var message = $("#title").val();
+        socket.emit("list");
         e.preventDefault();
       });
 
