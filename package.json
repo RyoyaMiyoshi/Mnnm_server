@@ -1,21 +1,18 @@
- { 
+{
   "name": "Mnnm",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.14.0",
-    "express-generator": "^4.13.4"
- },
+    "ejs": "*",
+    "pg": "latest",
+    "socket.io": "*",
+    "tesseract.js": "^1.0.10"
+  },
   "devDependencies": {},
   "scripts": {
     "test": "test"
   },
   "author": "nanaumi",
-  "license": "nanaumi",
-  "dependencies": {
-   "socket.io": "*",
-  "pg":"latest",
-  "ejs":"*"
- }
+  "license": "nanaumi"
 }

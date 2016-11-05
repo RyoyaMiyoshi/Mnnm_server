@@ -7,6 +7,14 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+    <script type="text/javascript">
+      //選択したデータの保存
+      var data="";
+      function handleFiles(files){
+        data=files[0];
+      };
+    </script>
   </head>
   <body>
     <div class="container">
@@ -16,12 +24,18 @@
           <label for="">test</label>
           <input type="text" class="form-control" id="title">
           <br>
-          
+
         </div><br>
         <button type="submit" class="btn btn-primary">送信</button>
       </form>
+
+      <form class="form-inline">
+        OCR化テスト
+        <input type="file" class="form-control" id="note" onchange="handleFiles(this.files)">
+        <button type="default" class="btn btn-primary" id="convert_img">変換</button>
+        <div id="res"></div>
       <br>
-      <div id="res"></div>
+      <div id="con_text"></div>
     </div>
     <script type="text/javascript">
 //ソケット通信の準備
@@ -31,9 +45,19 @@ socket.on("list_back", function(data){
 });
 //サーバにデータを送る関数
 $("form").submit(function(e){
-var message = $("#title").val();    
+var message = $("#title").val();
  socket.emit("list");
   e.preventDefault();
+});
+
+//画像から文章の書き出し
+$("#convert_img").click(function(e){
+      socket.emit('convert_img', data);
+});
+
+//OCR化した文字列の表示
+socket.on("convert_text", function(data){
+  $("#con_text").html(data);
 });
     </script>
   </body>
