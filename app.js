@@ -66,7 +66,7 @@ io.sockets.on('connection',function(socket){
       var imax = "select id from notes;"
       client.query(imax,function(err, max){
         console.log(max.rows.length);
-        var getdata = "select id, pdf,cource from notes;"
+        var getdata = "select id, pdf, text, cource from notes;"
         client.query(getdata,function(err, note){
           var i;
           var w = 0;
@@ -77,6 +77,7 @@ io.sockets.on('connection',function(socket){
             arraylist[w].code = note.rows[i].pdf;
            　arraylist[w].id = note.rows[i].id;
             arraylist[w].cource = note.rows[i].cource;
+            arraylist[w].text = note.rows[i].text;
             console.log(arraylist[w].id);
             w = w+1;
           }
