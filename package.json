@@ -8,7 +8,8 @@
     "pg": "latest",
     "socket.io": "*",
     "tesseract.js": "^1.0.10",
-    "kuromoji": "*"
+    "kuromoji": "*",
+    "urlsafe-base64": "*"
   },
   "devDependencies": {},
   "scripts": {

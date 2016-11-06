@@ -52,7 +52,7 @@
 
       //画像から文章の書き出し
       $("#convert_img").click(function(e){
-        socket.emit('convert_img', data);
+        socket.emit('convert', data);
       });
 
       //OCR化した文字列の表示→形態素解析
@@ -63,9 +63,18 @@
       });
 
       //形態素解析結果
-      socket.on("con_keitaiso", function(data){
-        for(var i = 0; i < data.length; i++){
-          $("#con_keitaiso").append(data[i]).append("/");
+      socket.on("con_keitaiso", function(note_img, text, keywords){
+        $("#con_text").html(text);
+        for(var i = 0; i < keywords.length; i++){
+          $("#con_keitaiso").append(keywords[i]).append("/");
+        }
+      });
+
+      //データ保存まで一括の流れ
+      socket.on("store_data", function(note_img, text, keywords){
+        $("#con_text").html(text);
+        for(var i = 0; i < keywords.length; i++){
+          $("#con_keitaiso").append(keywords[i]).append("/");
         }
       });
 

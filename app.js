@@ -4,6 +4,7 @@ var fs = require( 'fs' ); // ファイル入出力モジュール読み込み
 var pg = require( 'pg' );
 var Tesseract = require('tesseract.js');
 var kuromoji = require('kuromoji');
+var base64 = require('urlsafe-base64');
 
 //ポート固定でHTTPサーバーを立てる
 var server = http.createServer( function( req, res ) {
@@ -40,11 +41,21 @@ io.sockets.on('connection',function(socket){
 
       client.query(pcid, function(err, max)
       {
-        var id_max = max.rows.length + 1;
-        var pcin = "insert into notes(id,pdf) values ("+id_max+",'"+data+"')";
-        client.query(pcin);
-        io.sockets.emit('encode_back', 1);
-        console.log(data);
+        //画像として扱うためにデコード
+        base64_img = base64.encode( data );
+        var note_img = base64.decode( base64_img );
+
+        //文字の抽出
+        Tesseract.recognize(note_img, {lang:"jpn"}).then(function(result){
+          var text = result.text;
+          console.log(text);
+
+          var id_max = max.rows.length + 1;
+          var pcin = "insert into notes(id,pdf,text) values ("+id_max+",'"+data+"','"+text+"')";
+          client.query(pcin);
+          io.sockets.emit('encode_back', 1);
+          console.log(data);
+        });
       });
     });
   });
@@ -52,25 +63,54 @@ io.sockets.on('connection',function(socket){
   socket.on('list',function(){
     pg.connect(connect_db,function(err, client){
       console.log("connect db");
-      var imax = "select id from notes;"
-      client.query(imax,function(err, max){
-        console.log(max.rows.length);
-        var i;
-        var w = 0;
-        var q = max.rows.length;
-        var array = new Array();
-        for(i = q; i > q - 8; i = i - 1){
-          var getdata = "select id, pdf from notes where id = "+i+";"
+        var imax = "select id from notes;"
+        client.query(imax,function(err, max){
+          console.log(max.rows.length);
+          var getdata = "select id, pdf from notes;"
           client.query(getdata,function(err, note){
-            array[w] = new Object();
-            array[w].code = note.rows[0].pdf;
-            array[w].id = note.rows[0].id;
-            console.log(array[w].id);
-            w = w + 1;
-          });
-        };
-        io.sockets.emit('list_back',array);
-        console.log("success");
+          var i;
+          var w = 0;
+          var q=max.rows.length-1;
+          var arraylist= new Array();
+          for(i=q;i>q-8;i=i-1){
+            arraylist[w] = new Object();
+            arraylist[w].code = note.rows[i].pdf;
+            arraylist[w].id = note.rows[i].id;
+            console.log(arraylist[w].id);
+            w = w+1;
+          }
+          io.sockets.emit('list_back',arraylist);
+          console.log(arraylist.length);
+          console.log(arraylist[1].id);
+        });
+      });
+    });
+  });
+
+  socket.on("convert", function(base64_img){
+    //画像として扱うためにデコード
+    base64_img = base64.encode( base64_img );
+    var note_img = base64.decode( base64_img );
+
+    //文字の抽出
+    Tesseract.recognize(note_img, {lang:"jpn"}).then(function(result){
+      var text = result.text;
+      console.log(text);
+
+      //タグ(名詞)の抽出
+      var builder = kuromoji.builder({
+        dicPath: 'node_modules/kuromoji/dict/'
+      });
+      builder.build(function(err, tokenizer) {
+        if(err) { throw err; }
+        var tokens = tokenizer.tokenize(text);
+        var keywords = [];
+        for(var i=0; i<tokens.length; i++){
+          if(tokens[i]['pos'] == "名詞")
+            keywords.push(tokens[i]['surface_form']);
+        }
+        console.log(keywords);
+        socket.emit("store_data", base64_img, text, keywords);
       });
     });
   });
