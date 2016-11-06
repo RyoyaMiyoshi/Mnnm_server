@@ -42,7 +42,7 @@ io.sockets.on('connection',function(socket){
       client.query(pcid, function(err, max)
       {
         //画像として扱うためにデコード
-        base64_img = base64.encode( data );
+        base64_img = base64.encode( data.code );
         var note_img = base64.decode( base64_img );
 
         //文字の抽出
@@ -51,10 +51,10 @@ io.sockets.on('connection',function(socket){
           console.log(text);
 
           var id_max = max.rows.length + 1;
-          var pcin = "insert into notes(id,pdf,text) values ("+id_max+",'"+data+"','"+text+"')";
+          var pcin = "insert into notes(id,pdf,cource,text) values ("+id_max+",'"+data.code+"',"+data.cource+",'"+text+"')";
           client.query(pcin);
           io.sockets.emit('encode_back', 1);
-          console.log(data);
+          console.log(data)
         });
       });
     });
@@ -63,11 +63,11 @@ io.sockets.on('connection',function(socket){
   socket.on('list',function(){
     pg.connect(connect_db,function(err, client){
       console.log("connect db");
-        var imax = "select id from notes;"
-        client.query(imax,function(err, max){
-          console.log(max.rows.length);
-          var getdata = "select id, pdf from notes;"
-          client.query(getdata,function(err, note){
+      var imax = "select id from notes;"
+      client.query(imax,function(err, max){
+        console.log(max.rows.length);
+        var getdata = "select id, pdf,cource from notes;"
+        client.query(getdata,function(err, note){
           var i;
           var w = 0;
           var q=max.rows.length-1;
@@ -75,7 +75,8 @@ io.sockets.on('connection',function(socket){
           for(i=q;i>q-8;i=i-1){
             arraylist[w] = new Object();
             arraylist[w].code = note.rows[i].pdf;
-            arraylist[w].id = note.rows[i].id;
+           　arraylist[w].id = note.rows[i].id;
+            arraylist[w].cource = note.rows[i].cource;
             console.log(arraylist[w].id);
             w = w+1;
           }
